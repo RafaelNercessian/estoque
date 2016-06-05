@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:composition template="_template.xhtml">
+		<ui:define name="corpo">
+			<p:tabView>
+				<p:tab title="Entrada de novo produto">
+					<h:form id="form">
+						<h:message for="codigo" errorClass="mensagemErro" />
+						<h:message for="tamanho" errorClass="mensagemErro" />
+						<h:message for="op" errorClass="mensagemErro" />
+						<h:message for="descricao" errorClass="mensagemErro" />
+						<h:message for="cor" errorClass="mensagemErro" />
+						<h:message for="localizacao" errorClass="mensagemErro" />
+						<h:message for="saldo" errorClass="mensagemErro" />
+						<h:message for="tipo" errorClass="mensagemErro" />
+						<h:message for="novoProduto" infoClass="mensagemSucesso" />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<h:panelGrid columns="2">
+							<h:outputText value="Código: " />
+							<p:inputMask mask="9.99.999.999"
+								value="#{entradaBean.produto.codigo}" id="codigo"
+								required="true" requiredMessage="O código está faltando!" />
+
+							<h:outputText value="Tamanho: " />
+							<p:inputText value="#{entradaBean.produto.tamanho}" id="tamanho"
+								required="true" requiredMessage="O tamanho está faltando!">
+								<f:validator
+									validatorId="br.com.cabolider.util.TamanhoValidator" />
+							</p:inputText>
+
+							<h:outputText value="Ordem de produção: " />
+							<p:inputMask mask="99999/9"
+								value="#{entradaBean.produtoDeEntrada.ordemDeProducao}" id="op"
+								required="true" requiredMessage="A op está faltando!" />
+
+							<h:outputText value="Descrição: " />
+							<p:inputText value="#{entradaBean.produto.descricao}"
+								id="descricao" required="true"
+								requiredMessage="A descrição está faltando!" />
+
+
+							<h:outputText value="Cor: " />
+							<p:inputText value="#{entradaBean.produto.cor}" id="cor"
+								required="true" requiredMessage="A cor está faltando!" />
+
+
+							<h:outputText value="Localização: " />
+							<p:inputText value="#{entradaBean.produto.localizacao}"
+								id="localizacao" required="true"
+								requiredMessage="A localização está faltando!" />
+
+							<h:outputText value="Saldo: " />
+							<p:inputText value="#{entradaBean.produto.saldo}" id="saldo"
+								required="true" requiredMessage="O saldo está faltando!" />
+
+							<h:outputText value="Tipo de cobre: " />
+							<p:inputText value="#{entradaBean.produto.tipoDeCobre}" id="tipo"
+								required="true" requiredMessage="Tipo Cobre está faltando!" />
+
+							<h:outputText value="Data: " />
+							<h:outputText value="#{entradaBean.produtoDeEntrada.data.time}">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="america/sao_paulo" />
+							</h:outputText>
+
+							<br />
+							<h:commandButton id="novoProduto" value="Inserir novo produto"
+								action="#{entradaBean.inserindoNovoProduto}"
+								binding="#{entradaBean.novoProduto}" />
+
+							<br />
+							<h:commandButton id="voltarPesquisa" value="Pesquisar"
+								action="produto?faces-redirect=true" />
+						</h:panelGrid>
+
+						<p:dataTable id="inserido_novo" var="produtoInserido"
+							value="#{entradaBean.retornoProdutosInseridos}"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+							paginator="true" rows="10" style="margin-bottom:20px"
+							rendered="#{usuarioLogadoBean.usuario.login=='Rafael'}">
+
+							<f:facet name="{Exporters}">
+
+								<h:commandLink>
+									<p:graphicImage name="imagens/CSV.png" width="24" />
+									<p:dataExporter type="csv" target="inserido_novo"
+										fileName="Cabos inseridos" />
+								</h:commandLink>
+							</f:facet>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Código" />
+								</f:facet>
+								<h:outputText value="#{produtoInserido.codigo}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Descrição" />
+								</f:facet>
+								<h:outputText value="#{produtoInserido.descricao}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Data da entrada" />
+								</f:facet>
+								<h:outputText value="#{produtoInserido.data.time}">
+									<f:convertDateTime pattern="dd/MM/yyyy"
+										timeZone="america/sao_paulo" />
+								</h:outputText>
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Ordem de produção" />
+								</f:facet>
+								<h:outputText value="#{produtoInserido.ordemDeProducao}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Tamanho (metros)" />
+								</f:facet>
+								<h:outputText value="#{produtoInserido.tamanho}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Quantidade inserida (rolos)" />
+								</f:facet>
+								<h:outputText value="#{produtoInserido.quantidadeEntrada}" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+			</p:tabView>
+		</ui:define>
+	</ui:composition>
+</html>

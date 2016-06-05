@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<ui:define name="corpo">
+		<p:tabView activeIndex="#{saidaBean.activeTabIndex}">
+			<p:ajax event="tabChange" partialSubmit="true" />
+			<p:tab title="Pesquisa Estoque">
+				<h:form id="formPesquisa">
+					<h:outputLabel value="Código do produto: " for="codigo" />
+					<p:inputMask id="codigo" mask="9.99.999.999"
+						value="#{produtoBean.produto.codigo}" />
+
+					<h:outputLabel value="Descrição: " for="descricao" />
+					<p:inputText id="descricao"
+						value="#{produtoBean.produto.descricao}" />
+
+					<h:commandButton value="Pesquisar"
+						action="#{produtoBean.pesquisar}">
+						<f:ajax execute="@form" render="produtosPesquisados" />
+					</h:commandButton>
+
+					<h:dataTable id="produtosPesquisados" value="#{produtoBean.lista}"
+						var="produto" styleClass="dados" rowClasses="par, impar">
+
+						<h:column>
+							<f:facet name="header">Código</f:facet> 
+										#{produto.codigo} 
+										</h:column>
+
+						<h:column>
+							<f:facet name="header">Descrição</f:facet> 
+		 									#{produto.descricao} 
+										</h:column>
+
+						<h:column>
+							<f:facet name="header">Localização</f:facet> 
+		 									#{produto.localizacao} 
+		 								</h:column>
+
+						<h:column>
+							<f:facet name="header">Cor</f:facet> 
+											#{produto.cor}					
+										</h:column>
+
+						<h:column>
+							<f:facet name="header">Tipo de cobre</f:facet>
+		 									#{produto.tipoDeCobre} 
+		 								</h:column>
+
+						<h:column>
+							<f:facet name="header">Tamanho (metros)</f:facet>
+		 									#{produto.tamanho} 
+		 								</h:column>
+
+						<h:column>
+							<f:facet name="header">Saldo (rolos)</f:facet> 
+		 									#{produto.saldo}
+		 								</h:column>
+					</h:dataTable>
+				</h:form>
+			</p:tab>
+
+			<p:tab title="Saída"
+				rendered="#{usuarioLogadoBean.usuario.login=='Rafael' or usuarioLogadoBean.usuario.login=='cabolider'}">
+				<h:form id="formSaida" acceptcharset="ISO-8859-1">
+					<h:message for="codigo_saida" errorClass="mensagemErro" />
+					<h:message for="tamanho_saida" errorClass="mensagemErro" />
+					<h:message for="qtde_retirada" errorClass="mensagemErro" />
+					<h:message for="saida_cliente" errorClass="mensagemErro" />
+					<h:message for="retirar" infoClass="mensagemSucesso" />
+					<br />
+					<br />
+					<br />
+					<h:panelGrid columns="2">
+
+						<h:outputText value="Código: " />
+						<p:inputMask mask="9.99.999.999" id="codigo_saida"
+							value="#{saidaBean.produto.codigo}" required="true"
+							requiredMessage="Campo código faltando!" />
+
+						<h:outputText value="Tamanho: " />
+						<p:inputText value="#{saidaBean.produto.tamanho}"
+							id="tamanho_saida" required="true"
+							requiredMessage="Campo tamanho faltando!">
+							<f:validator validatorId="br.com.cabolider.util.TamanhoValidator" />
+						</p:inputText>
+
+						<h:outputText value="Quantidade retirada: " />
+						<p:inputText value="#{saidaBean.valorASerRetirado}"
+							id="qtde_retirada" required="true"
+							requiredMessage="Campo quantidade faltando!"
+							converterMessage="O campo quantidade retirada só aceita números!" />
+
+						<h:outputText value="Nome do cliente: " />
+						<p:inputText value="#{saidaBean.saidaDeProduto.nomeDoCliente}"
+							id="saida_cliente" required="true"
+							requiredMessage="Campo nome do cliente faltando!" />
+
+						<h:outputText value="Data de saída: " id="dataSaida" />
+						<h:outputText value="#{saidaBean.saidaDeProduto.data.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="america/sao_paulo" />
+						</h:outputText>
+
+						<br />
+						<h:commandButton value="Retirar"
+							action="#{saidaBean.produtoASerRetirado}"
+							binding="#{saidaBean.retirada}" id="retirar" />
+					</h:panelGrid>
+
+					<p:dataTable id="tbl" var="produtoRetirado"
+						value="#{saidaBean.retornoProdutoRetirado}"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+						paginator="true" rows="10" style="margin-bottom:20px"
+						rendered="#{usuarioLogadoBean.usuario.login=='Rafael'}">
+
+						<f:facet name="{Exporters}">
+							<h:commandLink>
+								<p:graphicImage name="imagens/CSV.png" width="24" />
+								<p:dataExporter type="csv" target="tbl"
+									fileName="Cabos retirados" />
+							</h:commandLink>
+						</f:facet>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Código" />
+							</f:facet>
+							<h:outputText value="#{produtoRetirado.codigo}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Descrição" />
+							</f:facet>
+							<h:outputText value="#{produtoRetirado.descricao}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Data da retirada" />
+							</f:facet>
+							<h:outputText value="#{produtoRetirado.data.time}">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="america/sao_paulo" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Tamanho (metros)" />
+							</f:facet>
+							<h:outputText value="#{produtoRetirado.tamanho}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Quantidade retirada (rolos)" />
+							</f:facet>
+							<h:outputText value="#{produtoRetirado.quantidadeASerRetirada}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nome do cliente" />
+							</f:facet>
+							<h:outputText value="#{produtoRetirado.nomeDoCliente}" />
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+
+			<p:tab title="Entrada"
+				rendered="#{usuarioLogadoBean.usuario.login=='Rafael'}">
+
+				<h:form id="form">
+					<h:message for="codigo_entrada" errorClass="mensagemErro" />
+					<h:message for="tamanho_entrada" errorClass="mensagemErro" />
+					<h:message for="qtde_entrada" errorClass="mensagemErro" />
+					<h:message for="op" errorClass="mensagemErro" />
+					<h:message for="entrada" infoClass="mensagemSucesso" />
+					<br />
+					<br />
+					<br />
+					<h:panelGrid columns="2">
+						<h:outputText value="Código: " />
+						<p:inputMask mask="9.99.999.999" id="codigo_entrada"
+							value="#{entradaBean.produto.codigo}" required="true"
+							requiredMessage="Campo código faltando!" />
+
+						<h:outputText value="Tamanho: " />
+						<p:inputText value="#{entradaBean.produto.tamanho}"
+							id="tamanho_entrada" required="true"
+							requiredMessage="Campo tamanho faltando!">
+							<f:validator validatorId="br.com.cabolider.util.TamanhoValidator" />
+						</p:inputText>
+
+						<h:outputText value="Quantidade inserida: " />
+						<p:inputText value="#{entradaBean.valorASerInserido}"
+							id="qtde_entrada" required="true"
+							requiredMessage="Campo quantidade faltando"
+							converterMessage="O campo quantidade inserida só aceita números!" />
+
+						<h:outputText value="Ordem de produção: " />
+						<p:inputMask mask="99999/9" id="op"
+							value="#{entradaBean.produtoDeEntrada.ordemDeProducao}"
+							required="true"
+							requiredMessage="Campo ordem de produção faltando!" />
+
+						<br />
+						<h:commandButton id="entrada" value="Inserir"
+							binding="#{entradaBean.inserir}"
+							action="#{entradaBean.produtoASerInserido}" />
+					</h:panelGrid>
+
+					<p:dataTable id="inserido" var="produtoInserido"
+						value="#{entradaBean.retornoProdutosInseridos}"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+						paginator="true" rows="10" style="margin-bottom:20px"
+						rendered="#{usuarioLogadoBean.usuario.login=='Rafael'}">
+
+						<f:facet name="{Exporters}">
+							<h:commandLink>
+								<p:graphicImage name="imagens/CSV.png" width="24" />
+								<p:dataExporter type="csv" target="inserido"
+									fileName="Cabos inseridos" />
+							</h:commandLink>
+						</f:facet>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Código" />
+							</f:facet>
+							<h:outputText value="#{produtoInserido.codigo}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Descrição" />
+							</f:facet>
+							<h:outputText value="#{produtoInserido.descricao}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Data da entrada" />
+							</f:facet>
+							<h:outputText value="#{produtoInserido.data.time}">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="america/sao_paulo" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Ordem de produção" />
+							</f:facet>
+							<h:outputText value="#{produtoInserido.ordemDeProducao}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Tamanho (metros)" />
+							</f:facet>
+							<h:outputText value="#{produtoInserido.tamanho}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Quantidade inserida (rolos)" />
+							</f:facet>
+							<h:outputText value="#{produtoInserido.quantidadeEntrada}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>
+</html>
