@@ -75,7 +75,7 @@
 							<br />
 							<h:commandButton id="novoProduto" value="Inserir novo produto"
 								action="#{entradaBean.inserindoNovoProduto}"
-								binding="#{entradaBean.novoProduto}" />
+								binding="#{entradaBean.novoProduto}" onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);" />
 
 							<br />
 							<h:commandButton id="voltarPesquisa" value="Pesquisar"

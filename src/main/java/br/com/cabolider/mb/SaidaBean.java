@@ -9,6 +9,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.component.tabview.TabView;
+import org.primefaces.event.TabChangeEvent;
+
 import br.com.cabolider.dao.ProdutoDao;
 import br.com.cabolider.dao.SaidaDao;
 import br.com.cabolider.modelo.Produto;
@@ -85,7 +88,7 @@ public class SaidaBean {
 		return itensDeSaida;
 	}
 
-	public void produtoASerRetirado() throws Exception {
+	public String produtoASerRetirado() throws Exception {
 		produtoASerRetirado = produtoDao.retornaProduto(produto);
 		if (produtoASerRetirado != null
 				&& produtoASerRetirado.getSaldo() >= valorASerRetirado) {
@@ -94,14 +97,14 @@ public class SaidaBean {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.dispatch("500.xhtml");
 		}
-
+		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+		return viewId + "?faces-redirect=true";
 	}
 
 	private void alterandoProdutoEInserindoSaida() {
 		produtoASerRetirado.setSaldo(produtoASerRetirado.getSaldo()
 				- valorASerRetirado);
-		if (produtoASerRetirado.getSaldo() == 0
-				&& !produtoASerRetirado.getTamanho().equals("100")) {
+		if (produtoASerRetirado.getSaldo() == 0) {
 			produtoDao.remove(produtoASerRetirado);
 		} else {
 			produtoDao.altera(produtoASerRetirado);
@@ -111,9 +114,9 @@ public class SaidaBean {
 		saidaDeProduto.setTamanho(produtoASerRetirado.getTamanho());
 		saidaDeProduto.setQuantidadeASerRetirada(valorASerRetirado);
 		saidaDao.gravarSaida(saidaDeProduto);
-		this.produto=new Produto();
-		this.saidaDeProduto=new Saida();
-		this.valorASerRetirado=null;
+		this.produto = new Produto();
+		this.saidaDeProduto = new Saida();
+		this.valorASerRetirado = null;
 		this.itensDeSaida = saidaDao.listaItensDeSaida();
 		FacesContext.getCurrentInstance().addMessage(
 				retirada.getClientId(),

@@ -7,8 +7,8 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="_template.xhtml">
 	<ui:define name="corpo">
-		<p:tabView activeIndex="#{saidaBean.activeTabIndex}">
-			<p:ajax event="tabChange" partialSubmit="true" />
+		<p:tabView>
+			<p:ajax event="tabChange" partialSubmit="true" activeIndex="#{saidaBean.activeTabIndex}" />
 			<p:tab title="Pesquisa Estoque">
 				<h:form id="formPesquisa">
 					<h:outputLabel value="Código do produto: " for="codigo" />
@@ -77,7 +77,7 @@
 					<br />
 					<br />
 					<h:panelGrid columns="2">
-
+					
 						<h:outputText value="Código: " />
 						<p:inputMask mask="9.99.999.999" id="codigo_saida"
 							value="#{saidaBean.produto.codigo}" required="true"
@@ -110,7 +110,7 @@
 						<br />
 						<h:commandButton value="Retirar"
 							action="#{saidaBean.produtoASerRetirado}"
-							binding="#{saidaBean.retirada}" id="retirar" />
+							binding="#{saidaBean.retirada}" id="retirar"  onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"/>
 					</h:panelGrid>
 
 					<p:dataTable id="tbl" var="produtoRetirado"
@@ -216,7 +216,7 @@
 						<br />
 						<h:commandButton id="entrada" value="Inserir"
 							binding="#{entradaBean.inserir}"
-							action="#{entradaBean.produtoASerInserido}" />
+							action="#{entradaBean.produtoASerInserido}" onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);" />
 					</h:panelGrid>
 
 					<p:dataTable id="inserido" var="produtoInserido"
