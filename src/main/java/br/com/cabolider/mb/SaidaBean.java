@@ -9,9 +9,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.component.tabview.TabView;
-import org.primefaces.event.TabChangeEvent;
-
 import br.com.cabolider.dao.ProdutoDao;
 import br.com.cabolider.dao.SaidaDao;
 import br.com.cabolider.modelo.Produto;
@@ -88,7 +85,7 @@ public class SaidaBean {
 		return itensDeSaida;
 	}
 
-	public String produtoASerRetirado() throws Exception {
+	public void produtoASerRetirado() throws Exception {
 		produtoASerRetirado = produtoDao.retornaProduto(produto);
 		if (produtoASerRetirado != null
 				&& produtoASerRetirado.getSaldo() >= valorASerRetirado) {
@@ -97,8 +94,6 @@ public class SaidaBean {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.dispatch("500.xhtml");
 		}
-		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-		return viewId + "?faces-redirect=true";
 	}
 
 	private void alterandoProdutoEInserindoSaida() {

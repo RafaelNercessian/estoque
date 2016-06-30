@@ -377,7 +377,10 @@ table.dados tr td{
 
 #j_idt12\:form\:message:hover,
 #j_idt13\:form\:novoProduto:hover,
-#j_idt13\:form\:voltarPesquisa:hover{
+#j_idt13\:form\:voltarPesquisa:hover,
+#j_idt13\:formPesquisa\:j_idt16:hover,
+#j_idt13\:formSaida\:retirar:hover,
+#j_idt13\:form\:entrada:hover{
 	background-color:#ddd
 }
 
@@ -427,4 +430,62 @@ table.dados tr td{
 	padding: 6px;
 	top: 43px;
 	left: 4px;
+}
+
+#j_idt13\:formPesquisa\:descricao,
+#j_idt13\:formSaida\:retirar{
+	margin-left:130px;
+	margin-top:10px;
+	margin-bottom:10px !important;
+}
+
+#j_idt13\:formPesquisa\:label_descricao{
+	margin-top:10px
+}
+
+#j_idt13\:formPesquisa\:j_idt16{
+	padding:5px 15px;
+	margin-top:15px;
+	margin-bottom:15px !important;
+	position:relative;
+	left:-10px;
+	background-color:#ccc;
+	border:0;
+	color:#000;
+	font-weight:bold;
+}
+
+
+#j_idt13\:formSaida\:retirar{
+	padding:5px 15px;
+	margin-top:15px;
+	margin-bottom:15px !important;
+	position:relative;
+	left:-130px;
+	background-color:#ccc;
+	border:0;
+	color:#000;
+	font-weight:bold;
+}
+
+#j_idt13\:form\:entrada{
+	padding:5px 15px;
+	margin-top:15px;
+	margin-bottom:15px !important;
+	position:relative;
+	left:-140px;
+	background-color:#ccc;
+	border:0;
+	color:#000;
+	font-weight:bold;
+}
+
+#j_idt13\:formPesquisa{
+	margin-top:20px
+}
+
+img[src*="/estoque/javax.faces.resource/imagens/CSV.png.xhtml"] {
+   position:relative;
+   top:5px;
+   left:10px
 }
