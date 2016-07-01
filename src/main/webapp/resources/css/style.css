@@ -40,7 +40,8 @@ body{
 }
 
 #j_idt9 a,
-#j_idt10 a{
+#j_idt10 a,
+#j_idt11 a{
 	text-decoration:none !important;
 	position:relative;
 	left:-4px;
@@ -48,7 +49,8 @@ body{
 }
 
 #j_idt9 a:hover,
-#j_idt10 a:hover{
+#j_idt10 a:hover,
+#j_idt11 a:hover{
 	text-decoration:underline !important;
 }
 
@@ -488,4 +490,27 @@ img[src*="/estoque/javax.faces.resource/imagens/CSV.png.xhtml"] {
    position:relative;
    top:5px;
    left:10px
+}
+
+#j_idt14\:form\:novoProduto{
+	margin-bottom:15px !important;
+	margin-top:15px;
+	background-color: #ccc !important;
+	border:1px solid #ddd;
+	color:#000;
+	font-weight:bold;
+	padding: 5px 15px;
+	position:relative;
+	left:-140px
+}
+
+#j_idt14\:form\:voltarPesquisa{
+	margin-bottom:15px !important;
+	background-color: #ccc !important;
+	border:1px solid #ddd;
+	color:#000;
+	font-weight:bold;
+	padding: 5px 15px;
+	position:relative;
+	left:-140px
 }
